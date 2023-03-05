@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 import { contactsCollectionRef } from "../utils/Firebase/firebaseConfig";
 import { addDoc, serverTimestamp } from "firebase/firestore";
-import { Mr_Dafoe, Mrs_Sheppards } from "@next/font/google";
+import { Mr_Dafoe, Mrs_Sheppards } from "next/font/google";
 import Navbar from "@/components/Navbar/Navbar";
 const dafoe = Mr_Dafoe({
   subsets: ["latin"],
