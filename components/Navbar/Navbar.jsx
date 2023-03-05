@@ -7,7 +7,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Link from "next/link";
 const Navbar = () => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
