@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+    @font-face {
+      font-family: "valencia";
+      src: url("../public/fonts/valencia-extraboldita.woff2") format("woff2");
+    }
+  }
+  @import url("https://fonts.googleapis.com/css2?family=Sigmar+One&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Mrs+Sheppards&display=swap");
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+  .hero_heading {
+    font-family: "Mr Dafoe", cursive !important;
+  }
+  
