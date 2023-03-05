@@ -7,7 +7,6 @@ import { Button, TextField } from "@mui/material";
 import "react-quill/dist/quill.snow.css";
 import Head from "next/head";
 import BackendNavbar from "../../../components/Admin/BackendNavbar";
-import { Description } from "@mui/icons-material";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
