@@ -1,11 +1,27 @@
+import { Button } from "@mui/material";
+import { useRouter } from "next/router";
 import React from "react";
 
 const projects = ({ users }) => {
+  const router = useRouter();
   return (
     <div>
       projects
       {users?.map((user, index) => (
-        <div key={index}>{user?.name}</div>
+        <div key={index}>
+          <span>{user.name} </span>
+          <Button
+            onClick={(e) => {
+              router.push({
+                pathname: "/projects/[id]",
+                query: { id: user?.id }
+              });
+            }}
+            variant="outlined"
+          >
+            Click
+          </Button>
+        </div>
       ))}
     </div>
   );
