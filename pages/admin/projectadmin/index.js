@@ -19,15 +19,10 @@ const ProjectAdmin = () => {
       );
     };
     getproject();
-    console.log(projects);
   }, []);
-  const editHandler = (id) => {
-    console.log(id);
-  };
   const deleteHandler = async (id) => {
     const docRef = doc(projectsCollectionRef, id);
     await deleteDoc(docRef);
-    console.log("deleted");
   };
   /*
    ! &>h1 -> heading 1
@@ -53,7 +48,7 @@ const ProjectAdmin = () => {
       <Head>
         <title>Project Admin</title>
       </Head>
-      <BackendNavbar/>
+      <BackendNavbar />
       <div>
         <h1 className="text-4xl text-center break-words font-semibold p-4 ">
           Project Admin
@@ -74,14 +69,7 @@ const ProjectAdmin = () => {
                 {project.title}
               </h2>
               <Link href={`/admin/projectadmin/${project.id}`}>
-                <Button
-                  onClick={() => {
-                    editHandler(project.id);
-                  }}
-                  variant="outlined"
-                >
-                  Edit
-                </Button>
+                <Button variant="outlined">Edit</Button>
               </Link>
               <Button
                 onClick={() => {

@@ -1,40 +1,25 @@
-import { blogsCollectionRef } from '@/utils/Firebase/firebaseConfig';
-import { getDocs } from 'firebase/firestore';
+import { blogsCollectionRef } from "@/utils/Firebase/firebaseConfig";
+import { getDocs } from "firebase/firestore";
 import { Button, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Navbar from "@/components/Navbar/Navbar";
-import React from 'react'
-const important = (blogs) => {
-    const router = useRouter();
-    return blogs?.map((blog) => (
-      <Paper key={blog?.id} elevation={3} className="py-3 px-2 my-2 mx-1">
-        <h2 className="text-3xl font-bold text-blue-700 mb-3 text-center">
-          {blog?.title}
-        </h2>
-        <p className="font-light">{blog?.description}</p>
-        <div className="flex flex-wrap items-center justify-around">
-          <Button
-            onClick={(e) => {
-              router.push({
-                pathname: "/blogs/[id]",
-                query: { id: blog?.id },
-              });
-            }}
-            className=""
-            variant="outlined"
-          >
-            Read More
-          </Button>
-        </div>
-      </Paper>
-    ));
-  };
-const blogs = ({blogs}) => {
+import { useState, useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+const blogs = () => {
+  const router = useRouter();
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    const getBlogs = async () => {
+      const blogs = await getDocs(blogsCollectionRef);
+      setBlogs(blogs.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getBlogs();
+  }, []);
   return (
     <div>
       <Head>
-        <title>blogs</title>
+        <title>Blogs</title>
       </Head>
       <Navbar />
       <div className="max-w-5xl mx-auto">
@@ -52,24 +37,32 @@ const blogs = ({blogs}) => {
             <CircularProgress />
           </div>
         ) : (
-          important(blogs)
+          blogs?.map((blog) => (
+            <Paper key={blog?.id} elevation={3} className="py-3 px-2 my-2 mx-1">
+              <h2 className="text-3xl font-bold text-blue-700 mb-3 text-center">
+                {blog?.title}
+              </h2>
+              <p className="font-light">{blog?.description}</p>
+              <div className="flex flex-wrap items-center justify-around">
+                <Button
+                  onClick={(e) => {
+                    router.push({
+                      pathname: "/blogs/[id]",
+                      query: { id: blog?.id },
+                    });
+                  }}
+                  className=""
+                  variant="outlined"
+                >
+                  Read More
+                </Button>
+              </div>
+            </Paper>
+          ))
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default blogs
-
-export const getServerSideProps = async () => {
-    const getBlogs = await getDocs(blogsCollectionRef);
-    const blogs = getBlogs.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    console.log(blogs);
-    return {
-      props: { blogs: JSON.parse(JSON.stringify(blogs)) },
-    };
-  };
-  
+export default blogs;

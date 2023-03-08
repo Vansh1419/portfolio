@@ -20,15 +20,10 @@ const BlogAdmin = () => {
       );
     };
     getBlog();
-    console.log(blogs);
   }, []);
-  const editHandler = (id) => {
-    console.log(id);
-  };
   const deleteHandler = async (id) => {
     const docRef = doc(blogsCollectionRef, id);
     await deleteDoc(docRef);
-    console.log("deleted");
   };
   /*
    ! &>h1 -> heading 1
@@ -75,14 +70,7 @@ const BlogAdmin = () => {
                 {blog.title}
               </h2>
               <Link href={`/admin/blogadmin/${blog.id}`}>
-                <Button
-                  onClick={() => {
-                    editHandler(blog.id);
-                  }}
-                  variant="outlined"
-                >
-                  Edit
-                </Button>
+                <Button variant="outlined">Edit</Button>
               </Link>
               <Button
                 onClick={() => {

@@ -6,7 +6,6 @@ import Navbar from "@/components/Navbar/Navbar";
 import { Button } from "@mui/material";
 
 const invividualProject = ({ project }) => {
-  console.log(project);
   return (
     <div>
       <Head>
@@ -60,8 +59,8 @@ const invividualProject = ({ project }) => {
 
 export default invividualProject;
 
-export const getServerSideProps = async (context) => {
-  const { id } = context.query;
+export const getStaticProps = async (context) => {
+  const { id } = context.params;
   const q = query(projectsCollectionRef, where("id", "==", id));
   const getProject = await getDocs(q);
   const datas = getProject.docs.map((doc) => ({
@@ -70,5 +69,21 @@ export const getServerSideProps = async (context) => {
   }));
   return {
     props: { project: JSON.parse(JSON.stringify(datas[0])) },
+    revalidate: 1,
+  };
+};
+
+export const getStaticPaths = async () => {
+  const getProjects = await getDocs(projectsCollectionRef);
+  const projects = getProjects.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+  const paths = projects.map((project) => ({
+    params: { id: project.id },
+  }));
+  return {
+    paths,
+    fallback: "blocking",
   };
 };
