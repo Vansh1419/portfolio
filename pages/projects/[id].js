@@ -6,7 +6,6 @@ import Navbar from "@/components/Navbar/Navbar";
 import { Button } from "@mui/material";
 
 const invividualProject = ({ project }) => {
-  console.log(project);
   return (
     <div>
       <Head>

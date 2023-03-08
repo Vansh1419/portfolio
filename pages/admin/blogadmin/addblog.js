@@ -54,7 +54,6 @@ const addblog = () => {
       setImage("");
       setLoad(false);
       await setDoc(docRef, { ...requestObj, id: docRef.id });
-      console.log("Document written with ID: ", docRef.id);
     } catch (err) {
       console.error("Error adding document: ", err);
     }

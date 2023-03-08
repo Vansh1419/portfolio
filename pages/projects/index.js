@@ -2,46 +2,20 @@ import { projectsCollectionRef } from "@/utils/Firebase/firebaseConfig";
 import { Button, Paper } from "@mui/material";
 import { getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
-import React from "react";
+import { useState, useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 import Head from "next/head";
 import Navbar from "@/components/Navbar/Navbar";
-const important = (projects) => {
+const projects = () => {
   const router = useRouter();
-  return projects?.map((project) => (
-    <Paper key={project?.id} elevation={3} className="py-3 px-2 my-2 mx-1">
-      <h2 className="text-3xl font-bold text-blue-700 mb-3 text-center">
-        {project?.title}
-      </h2>
-      <p className="font-light">{project?.description}</p>
-      <div className="flex flex-wrap items-center justify-around">
-        <a target="_blank" className="my-2" href={project.github}>
-          <Button className="" variant="outlined">
-            Github
-          </Button>
-        </a>
-        <a target="_blank" className="my-2" href={project.projectLink}>
-          <Button className="" variant="outlined">
-            Project
-          </Button>
-        </a>
-        <Button
-          onClick={(e) => {
-            router.push({
-              pathname: "/projects/[id]",
-              query: { id: project?.id },
-            });
-          }}
-          className=""
-          variant="outlined"
-        >
-          Know More
-        </Button>
-      </div>
-    </Paper>
-  ));
-};
-const projects = ({ projects }) => {
-
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    const getProjects = async () => {
+      const projects = await getDocs(projectsCollectionRef);
+      setProjects(projects.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getProjects();
+  }, []);
   return (
     <div>
       <Head>
@@ -63,7 +37,42 @@ const projects = ({ projects }) => {
             <CircularProgress />
           </div>
         ) : (
-          important(projects)
+          projects?.map((project) => (
+            <Paper
+              key={project?.id}
+              elevation={3}
+              className="py-3 px-2 my-2 mx-1"
+            >
+              <h2 className="text-3xl font-bold text-blue-700 mb-3 text-center">
+                {project?.title}
+              </h2>
+              <p className="font-light">{project?.description}</p>
+              <div className="flex flex-wrap items-center justify-around">
+                <a target="_blank" className="my-2" href={project.github}>
+                  <Button className="" variant="outlined">
+                    Github
+                  </Button>
+                </a>
+                <a target="_blank" className="my-2" href={project.projectLink}>
+                  <Button className="" variant="outlined">
+                    Project
+                  </Button>
+                </a>
+                <Button
+                  onClick={(e) => {
+                    router.push({
+                      pathname: "/projects/[id]",
+                      query: { id: project?.id },
+                    });
+                  }}
+                  className=""
+                  variant="outlined"
+                >
+                  Know More
+                </Button>
+              </div>
+            </Paper>
+          ))
         )}
       </div>
     </div>
@@ -71,15 +80,3 @@ const projects = ({ projects }) => {
 };
 
 export default projects;
-
-export const getServerSideProps = async () => {
-  const getProjects = await getDocs(projectsCollectionRef);
-  const projects = getProjects.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-  console.log(projects);
-  return {
-    props: { projects: JSON.parse(JSON.stringify(projects)) },
-  };
-};
